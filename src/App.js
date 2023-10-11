@@ -1,37 +1,27 @@
-import { useState } from "react";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom"; 
+import NvaBar from "./components/NavBar";
+import routes from "./routes";
+
 
 function App(){
-const[title, setTitle]=useState('a');
-const[body, setBody]=useState('a');
-const onSubmit = ()=>{
-  console.log({title},{body});
-}
-
   return (
-    <div className="container">
-      <div className="mb-3 ">
-        <label className="form-label">Title</label>
-        <input 
-          className="form-control" 
-          value={title} 
-          onChange={(e)=>{ //change됬을때 값이 e 이다.
-            setTitle(e.target.value);
-            console.log(e.target.value);
-          }}/>
+    <Router>
+      {/* navbar */}
+      <NvaBar/>
+      <div className="container mt-3">
+        <Switch> 
+          {/* 객체배열에 map으로 각 value를 꺼네서 그 value의 프로퍼티속성을 사용한다. */}
+          {routes.map((route)=>{ 
+            //값은 리턴해주고 루트 속성중에 component가 있다.여기에 page.js의 이름이 들어간다.
+            return <Route key={route.path} exact path={route.path} component={route.component}/>
+          })}
+        </Switch>
       </div>
-      <div className="mb-3 ">
-        <label className="form-label">Body</label>
-        <textarea 
-          rows="7"
-          className="form-control" 
-          value={body} 
-          onChange={(e)=>{ //change됬을때 값이 e 이다.
-            setBody(e.target.value);
-            console.log(e.target.value);
-          }}/>
-      </div>
-      <button onClick={onSubmit} className="btn btn-primary">Post</button>
-    </div>
+    </Router>
   );
 }
 export default App;//함수 내보내기 

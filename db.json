@@ -1,3 +1,10 @@
 {
-  "posts": []
+  "posts": [
+    {
+      "title": "a1",
+      "body": "a1",
+      "createdAt": 1697119153560,
+      "id": 1
+    }
+  ]
 }

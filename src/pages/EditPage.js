@@ -1,7 +1,10 @@
+import BlogForm from "../components/BlogForm";
 
 const EditPage = () => {
     return(
-        <div>여기는 editpage.js 입니다. </div>
+        <div>
+            <BlogForm modify={true}></BlogForm> 
+        </div>
     )
 };
 export default EditPage;

@@ -3,11 +3,16 @@ import EditPage from "./pages/EditPage";
 import HomePage from "./pages/HomePage";
 import ListPage from "./pages/ListPage";
 import ShowPage from "./pages/ShowPage";
+import AdminPage from "./pages/AdminPage";
 
 const routes = [ //객체배열
   {
     path:'/',
     component: HomePage
+  },
+  {
+    path:'/admin',
+    component: AdminPage
   },
   {
     path:'/blogs',

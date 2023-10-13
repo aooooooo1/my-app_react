@@ -61,7 +61,7 @@ const BlogForm = ({modify}) =>{
                 checkboxPublish: checkbox1,
                 createdAt: Date.now()
             }).then(()=>{
-                history.push('/blogs');
+                history.push('/admin');
             });
         }
     }    

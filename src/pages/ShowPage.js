@@ -33,7 +33,7 @@ const ShowPage = () =>{
     }
     //뒤로가기함수
     const backPage = ()=>{
-        history.goBack();
+        history.push('/blogs');
     }
     return (
         <div>

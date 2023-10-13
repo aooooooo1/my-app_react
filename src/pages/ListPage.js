@@ -43,7 +43,7 @@ const ListPage = () => {
             );
         }
         //모든 게시글 불러오기.
-        return posts.map((value)=>{
+        return posts.filter(posts=>posts.checkboxPublish).map((value)=>{
             return (
                 <Card key={value.id} title1={value.title}
                     onClick1={()=>history.push(`/blogs/${value.id}`)}>

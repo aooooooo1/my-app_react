@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 // import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom.min";
 import { useHistory, useParams } from "react-router-dom";
-import { bool, PropTypes } from "prop-types";
+import propTypes from "prop-types";
 
 
 const BlogForm = ({modify}) =>{
@@ -124,7 +124,7 @@ const BlogForm = ({modify}) =>{
 }
 //modify는 항상 참,거짓으로 받는다.
 BlogForm.propTypes = {
-    modify: bool
+    modify: propTypes.bool
 }
 //modify의 기본 prop는 false이다.
 BlogForm.defaultProps = {

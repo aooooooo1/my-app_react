@@ -8,8 +8,8 @@ const AdminPage = () => {
             <div className="d-flex justify-content-between">
                 <h1>관리자 페이지</h1>
                 <div>
-                    <Link to="/blogs/create" className="btn btn-success">
-                        create now
+                    <Link to="/blogs/create" className="btn btn-light">
+                        글 작성하기
                     </Link>
                 </div>
             </div>

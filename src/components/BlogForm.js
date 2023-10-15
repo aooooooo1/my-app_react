@@ -3,7 +3,8 @@ import axios from "axios";
 // import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom.min";
 import { useHistory, useParams } from "react-router-dom";
 import propTypes from "prop-types";
-
+import Toast from './Toast';
+import {v4 as uuidv4} from 'uuid';
 
 const BlogForm = ({modify}) =>{
     //페이지 이동 함수 생성
@@ -20,6 +21,10 @@ const BlogForm = ({modify}) =>{
     //checkbox
     const [checkbox1, setCheckbox1] = useState(false);
     const [OriCheckbox1, setOriCheckbox1] = useState();
+    //validate
+    const [titleError, setTitleError] = useState(false);
+    const [bodyError, setBodyError] = useState(false);
+    const [toast, setToast] = useState([]);
 
     //수정시 데이터 가져오기(한번만 실행)
     useEffect(()=>{
@@ -43,27 +48,65 @@ const BlogForm = ({modify}) =>{
         return title !== originTitle || body !== originBody || checkbox1 !== OriCheckbox1;
     }
 
-    const onSubmit = ()=>{
-        //modify가 true일 경우
-        if(modify){
-            axios.patch(`http://localhost:3001/posts/${id}`,{
-                title:title,
-                body:body,
-                checkboxPublish: checkbox1,
-            }).then((res)=>{
-                console.log(res);
-                history.push(`/blogs/${id}`);
-            });
-        } else{
-            axios.post('http://localhost:3001/posts',{
-                title : title, //title 만 적어도 된다. 
-                body: body,
-                checkboxPublish: checkbox1,
-                createdAt: Date.now()
-            }).then(()=>{
-                history.push('/admin');
-            });
+    //validate
+    const validateCheck = ()=>{
+        let vali = true;
+
+        if(title === ''){
+            setTitleError(true);
+            vali=false;
         }
+        if(body===''){
+            setBodyError(true);
+            vali=false;
+        }
+        return vali;
+    }
+    //토스트 생성
+    const addToast = (toast)=>{
+        setToast(prev=>[...prev,toast]);
+        setTimeout(()=>{
+            deleteToast(toast.id);
+        },2000);
+    }
+    //토스트 삭제
+    const deleteToast = (id)=>{
+        const FilterTo = toast.filter(toast=>{
+            return toast.id !== id;
+        })
+        setToast(FilterTo);
+    }
+    const onSubmit = ()=>{
+        setTitleError(false);
+        setBodyError(false);
+        if(validateCheck()){
+            //modify가 true일 경우
+            if(modify){
+                axios.patch(`http://localhost:3001/posts/${id}`,{
+                    title:title,
+                    body:body,
+                    checkboxPublish: checkbox1,
+                }).then((res)=>{
+                    console.log(res);
+                    history.push(`/blogs/${id}`);
+                });
+            } else{
+                axios.post('http://localhost:3001/posts',{
+                    title : title, //title 만 적어도 된다. 
+                    body: body,
+                    checkboxPublish: checkbox1,
+                    createdAt: Date.now()
+                }).then(()=>{ 
+                    //history.push('/admin');
+                    addToast({
+                        text:'(클릭) 성공적으로 등록 되었습니다.',
+                        type:'success',
+                        id:uuidv4(),
+                    });
+                });
+            }
+        }
+        
     }    
     //뒤로 이동
     const backPage = ()=>{
@@ -86,27 +129,30 @@ const BlogForm = ({modify}) =>{
 
     return(
         <div>
+            <Toast toasts={toast} deleteToast={deleteToast}/>
             <h2 className="mt-3">{modify ? '글 수정하기' : '글 작성하기'}</h2>
             <div className="mb-3">
                 <label className="form-label">제목</label>
                 <input 
-                className="form-control" 
+                className={`form-control ${titleError && 'border-danger'}`}
                 value={title} 
                 onChange={(e)=>{ //change됬을때 값이 e 이다.
                     setTitle(e.target.value);
                     //console.log(e.target.value);
                 }}/>
+                {titleError && <div className="text-danger">제목은 필수입니다.😭😭</div>}
             </div>
             <div className="mb-3 ">
                 <label className="form-label">내용</label>
                 <textarea 
                 rows="7"
-                className="form-control" 
+                className={`form-control ${bodyError && 'border-danger'}`}
                 value={body} 
                 onChange={(e)=>{ //change됬을때 값이 e 이다.
                     setBody(e.target.value);
                     //console.log(e.target.value);
                 }}/>
+                {bodyError && <div className="text-danger">내용은 필수입니다.😭😭</div>}
             </div>
             {/* 체크박스 */}
             <div className="form-check">

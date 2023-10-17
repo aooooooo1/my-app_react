@@ -8,6 +8,7 @@ import routes from "./routes";
 import Toast from "./components/Toast";
 import useToast from "./hooks/toast";
 import { useSelector } from "react-redux";
+import ProtectedRoute from "./protectedRoute";
 
 
 function App(){
@@ -22,6 +23,9 @@ function App(){
         <Switch> 
           {/* 객체배열에 map으로 각 value를 꺼네서 그 value의 프로퍼티속성을 사용한다. */}
           {routes.map((route)=>{ 
+            if(route.admin){
+              return <ProtectedRoute key={route.path} exact path={route.path} component={route.component}/>
+            }
             //값은 리턴해주고 루트 속성중에 component가 있다.여기에 page.js의 이름이 들어간다.
             return <Route key={route.path} exact path={route.path} component={route.component}/>
           })}

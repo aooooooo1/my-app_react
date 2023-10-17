@@ -2,8 +2,11 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom/cjs/react-router-dom.min";
 import Spinner from "../components/Spinner"
+import { useSelector } from "react-redux";
 //게시글 클릭시 상세페이지
 const ShowPage = () =>{
+    const isLoggedIn = useSelector(state=>state.admin.isLoggedIn);
+    const [timer,setTimer] = useState(0);
     const history = useHistory();
     //id사용
     const { id } = useParams();
@@ -18,6 +21,15 @@ const ShowPage = () =>{
             setLoading(false);
         })
     };
+    useEffect(()=>{
+        const interval = setInterval(()=>{
+            console.log(timer);
+            setTimer(prev=>prev+1);
+        },1000);
+        return ()=>{
+            clearInterval(interval);
+        }
+    },[]);
     useEffect(()=>{
         getPost(id);
     },[id])//[]안이 바뀌면 useEffect는 실행한다.
@@ -35,15 +47,17 @@ const ShowPage = () =>{
     const backPage = ()=>{
         history.goBack();
     }
+    
     return (
         <div>
             <div className="d-flex">
-                <h1 className="flex-grow-1">{post.title}</h1>   
+                <h1 className="flex-grow-1">{post.title} &nbsp; ({timer}초)</h1>   
                 <div>
+                    {isLoggedIn &&
                     <Link className="btn btn-outline-secondary fw-semibold"
                     to={`/blogs/${id}/edit`}>
                         수정
-                    </Link>
+                    </Link>}
                 </div>
             </div>
             <small className="text-muted">

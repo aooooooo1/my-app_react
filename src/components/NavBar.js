@@ -18,13 +18,14 @@ const NvaBar = () => {
                         aria-current="page" 
                         to="/blogs">Blogs</NavLink>
                     </li>
+                    {isLoggedIn && 
                     <li className="nav-item">
                         <NavLink
                         activeClassName="active"
                         className="nav-link" 
                         aria-current="page" 
                         to="/admin">관리자</NavLink>
-                    </li>
+                    </li>}
                     <button className="btn text-white" onClick={()=>{
                         if(isLoggedIn){
                             dispatch(logOut())

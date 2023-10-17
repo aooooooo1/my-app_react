@@ -22,6 +22,8 @@ const ShowPost = ({isAdmin})=>{
     const [searchText , setSearchText]= useState('');
     //토스트
     const {addToast} = useToast([]);
+    //에러
+    const [er,setEr]=useState('');
     //주소창에서 ? 뒤에 숫자 부분 가져오기
     const location = useLocation();
     const params = new URLSearchParams(location.search)
@@ -78,6 +80,13 @@ const ShowPost = ({isAdmin})=>{
                 setNumOfPost(res.headers['x-total-count']);
                 setPosts(res.data);
                 setLoading(false);
+            }).catch((e)=>{
+                setLoading(false);
+                setEr('server wrong');
+                addToast({
+                    text:'서버쪽에 문제가 생긴거 같아요..',
+                    type:'danger',
+                })
             })
         }
         setCureentPage(parseInt(pageParam) || 1);
@@ -90,10 +99,15 @@ const ShowPost = ({isAdmin})=>{
         axios.delete(`http://localhost:3001/posts/${id}`).then(()=>{
             setPosts(survivor=>survivor.filter(posts=>posts.id !== id));
             addToast({
-                text:'(클릭) 성공적으로 삭제가 완료 되었습니다.',
+                text:'성공적으로 삭제가 완료 되었습니다.',
                 type:'success',
                 id:uuidv4(),
-            });
+            }).catch(e=>{
+                addToast({
+                    text:'서버문제로 삭제할 수 없습니다.',
+                    type:'danger',
+                })
+            })
         })
     }
 
@@ -104,13 +118,16 @@ const ShowPost = ({isAdmin})=>{
             <Spinner/>
         )
     }
+    //에러
+    if(er){
+        return <div>{er}</div>
+    }
     if(posts.length === 0){
         return(
             <>
             <input type="text" className="form-control" placeholder="검색" value={searchText} onChange={(e)=>setSearchText(e.target.value)} onKeyUp={getPosts}/>
             <hr/> 
             <div>게시글이 없습니다.</div>
-            {/* <Toast toasts={toast} deleteToast={deleteToast}/> */}
             </>
         );
     }

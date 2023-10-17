@@ -1,6 +1,10 @@
 import PropTypes from 'prop-types';
-
+import { UseSelector, useSelector } from 'react-redux/es/hooks/useSelector';
 const Card = ({title1, children, onClick1}) =>{
+    const to = useSelector((state)=>{
+        return state.toast.toasts;
+    });
+    console.log('to',to);
     return (
         <div className="card mb-3 cursor-pointer" onClick={onClick1}>
             <div className="card-body py-1">

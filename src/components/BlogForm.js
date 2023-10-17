@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-// import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom.min";
 import { useHistory, useParams } from "react-router-dom";
 import propTypes from "prop-types";
-import Toast from './Toast';
 import {v4 as uuidv4} from 'uuid';
-
+import useToast from "../hooks/toast";
 const BlogForm = ({modify}) =>{
     //페이지 이동 함수 생성
     const history = useHistory();
@@ -24,8 +22,8 @@ const BlogForm = ({modify}) =>{
     //validate
     const [titleError, setTitleError] = useState(false);
     const [bodyError, setBodyError] = useState(false);
-    const [toast, setToast] = useState([]);
-
+    //커스텀 훅스 토스트 사용하기
+    const {addToast} = useToast();
     //수정시 데이터 가져오기(한번만 실행)
     useEffect(()=>{
         if(modify){
@@ -62,20 +60,7 @@ const BlogForm = ({modify}) =>{
         }
         return vali;
     }
-    //토스트 생성
-    const addToast = (toast)=>{
-        setToast(prev=>[...prev,toast]);
-        setTimeout(()=>{
-            deleteToast(toast.id);
-        },2000);
-    }
-    //토스트 삭제
-    const deleteToast = (id)=>{
-        const FilterTo = toast.filter(toast=>{
-            return toast.id !== id;
-        })
-        setToast(FilterTo);
-    }
+    //글작성페이지에서 게시를 눌렀을때
     const onSubmit = ()=>{
         setTitleError(false);
         setBodyError(false);
@@ -91,15 +76,16 @@ const BlogForm = ({modify}) =>{
                     history.push(`/blogs/${id}`);
                 });
             } else{
+                //글작성 일경우
                 axios.post('http://localhost:3001/posts',{
                     title : title, //title 만 적어도 된다. 
                     body: body,
                     checkboxPublish: checkbox1,
                     createdAt: Date.now()
                 }).then(()=>{ 
-                    //history.push('/admin');
+                    // history.push('/admin');
                     addToast({
-                        text:'(클릭) 성공적으로 등록 되었습니다.',
+                        text:'성공적으로 등록 되었습니다.',
                         type:'success',
                         id:uuidv4(),
                     });
@@ -107,7 +93,7 @@ const BlogForm = ({modify}) =>{
             }
         }
         
-    }    
+    }     
     //뒤로 이동
     const backPage = ()=>{
         history.goBack();
@@ -129,7 +115,7 @@ const BlogForm = ({modify}) =>{
 
     return(
         <div>
-            <Toast toasts={toast} deleteToast={deleteToast}/>
+            {/* <Toast toasts={toast} deleteToast={deleteToast}/> */}
             <h2 className="mt-3">{modify ? '글 수정하기' : '글 작성하기'}</h2>
             <div className="mb-3">
                 <label className="form-label">제목</label>
@@ -156,7 +142,8 @@ const BlogForm = ({modify}) =>{
             </div>
             {/* 체크박스 */}
             <div className="form-check">
-                <input type="checkBox" className="form-check-input" id="ch" checked={checkbox1} onChange={check}/>
+                <input type="checkBox" className="form-check-input" 
+                id="ch" checked={checkbox1} onChange={check}/>
                 <label className="form-check-lable" for="ch" >공개</label>
             </div>
             {/* 수정버튼 */}

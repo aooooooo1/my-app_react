@@ -1,8 +1,11 @@
 import {
     Link , NavLink
 } from "react-router-dom"; 
-
+import { useDispatch, useSelector} from 'react-redux';
+import { login,logOut } from "../store/adminSlice";
 const NvaBar = () => {
+    const isLoggedIn = useSelector((state)=>state.admin.isLoggedIn);
+    const dispatch = useDispatch();
     return(
         <nav className="navbar navbar-dark bg-dark">
             <div className="container">
@@ -22,6 +25,15 @@ const NvaBar = () => {
                         aria-current="page" 
                         to="/admin">관리자</NavLink>
                     </li>
+                    <button className="btn text-white" onClick={()=>{
+                        if(isLoggedIn){
+                            dispatch(logOut())
+                        } else{
+                            dispatch(login());
+                        }
+                    }}>
+                        {isLoggedIn ? '로그아웃':'로그인'}
+                    </button>
                 </ul>  
             </div> 
         </nav>

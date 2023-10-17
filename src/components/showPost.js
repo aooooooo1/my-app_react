@@ -1,12 +1,13 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Card from "../components/Card";
 import { useHistory, useLocation } from "react-router-dom";
 import Spinner from "../components/Spinner";
 import propTypes from "prop-types";
 import Paigination from "./Paigination";
-import Toast from "./Toast";
 import {v4 as uuidv4} from 'uuid';
+import useToast from "../hooks/toast";
+import { useSelector } from "react-redux";
 //모든 게시글을 가져옵니다.
 const ShowPost = ({isAdmin})=>{
     const history = useHistory();
@@ -20,12 +21,15 @@ const ShowPost = ({isAdmin})=>{
     //검색 벨류 
     const [searchText , setSearchText]= useState('');
     //토스트
-    const [toast, setToast] = useState([]);
+    const {addToast} = useToast([]);
     //주소창에서 ? 뒤에 숫자 부분 가져오기
     const location = useLocation();
     const params = new URLSearchParams(location.search)
     const pageParam = params.get('page');
-
+    //리덕스 불러오기
+    const toasts1 = useSelector((state)=>{
+        return state.toast.toasts;
+    });
     const limit = 5;
     //페이지 갯수는 게시글 나누기 5로 하였다. 2나옴
     useEffect(()=>{
@@ -80,20 +84,6 @@ const ShowPost = ({isAdmin})=>{
         getPosts(parseInt(pageParam) || 1);
     },[pageParam, isAdmin])
 
-    //토스트 생성
-    const addToast = (toast)=>{
-        setToast(prev=>[...prev,toast]);
-        setTimeout(()=>{
-            deleteToast(toast.id);
-        },2000);
-    }
-    //토스트 삭제
-    const deleteToast = (id)=>{
-        const FilterTo = toast.filter(toast=>{
-            return toast.id !== id;
-        })
-        setToast(FilterTo);
-    }
     // 삭제하기 버튼 이벤트
     const deleteCard = (e , id)=>{
         e.stopPropagation();
@@ -120,7 +110,7 @@ const ShowPost = ({isAdmin})=>{
             <input type="text" className="form-control" placeholder="검색" value={searchText} onChange={(e)=>setSearchText(e.target.value)} onKeyUp={getPosts}/>
             <hr/> 
             <div>게시글이 없습니다.</div>
-            <Toast toasts={toast} deleteToast={deleteToast}/>
+            {/* <Toast toasts={toast} deleteToast={deleteToast}/> */}
             </>
         );
     }
@@ -144,7 +134,7 @@ const ShowPost = ({isAdmin})=>{
     //모든 게시글 불러오기.
     return (
         <div>
-            <Toast toasts={toast} deleteToast={deleteToast}/>
+            {/* <Toast toasts={toast} deleteToast={deleteToast}/> */}
             <input type="text" className="form-control" placeholder="검색" value={searchText} onChange={(e)=>setSearchText(e.target.value)} onKeyUp={getPosts}/>
             <hr/> 
             {renderPost()}

@@ -1,13 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link, useHistory, useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Spinner from "../components/Spinner"
 import { useSelector } from "react-redux";
 //게시글 클릭시 상세페이지
 const ShowPage = () =>{
     const isLoggedIn = useSelector(state=>state.admin.isLoggedIn);
     const [timer,setTimer] = useState(0);
-    const history = useHistory();
+    const history = useNavigate();
     //id사용
     const { id } = useParams();
     //받아온데이터를 state에 저장

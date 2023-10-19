@@ -1,12 +1,10 @@
-import { Redirect,Route } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-const ProtectedRoute = ({component,path,key})=>{
+const ProtectedRoute = ({element})=>{
     const isLoggedIn = useSelector(state => state.admin.isLoggedIn);
     if(!isLoggedIn){
-        return <Redirect to="/"/>
+        return <Navigate to="/"/>
     }
-    return (
-        <Route component={component} path={path} key={key} exact/>
-    );
+    return element;
 }
 export default ProtectedRoute;

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import Card from "../components/Card";
-import { useHistory, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Spinner from "../components/Spinner";
 import propTypes from "prop-types";
 import Paigination from "./Paigination";
@@ -10,7 +10,7 @@ import useToast from "../hooks/toast";
 import { useSelector } from "react-redux";
 //모든 게시글을 가져옵니다.
 const ShowPost = ({isAdmin})=>{
-    const history = useHistory();
+    const history = useNavigate();
     //제목 가져오기
     const [posts, setPosts] = useState([]);
     //현제 페이지 업데이트

@@ -8,35 +8,35 @@ import NotFoundPage from "./pages/NotFoundPage"
 const routes = [ //객체배열
   {
     path:'/',
-    component: HomePage
+    element: <HomePage/>,
   },
   {
     path:'/admin',
-    component: AdminPage,
+    element: <AdminPage/>,
     admin : true
   },
   {
     path:'/blogs',
-    component: ListPage
+    element: <ListPage/>,
   },
   {
     path:'/blogs/create',
-    component: CreatePage,
+    element: <CreatePage/>,
     admin : true
   },
   {
     path:'/blogs/:id/edit',
-    component: EditPage,
+    element: <EditPage/>,
     admin : true
   },
   { //게시글 클릭시 상세페이지,하지만 :id 부분에는 어떤것도 
     //들어올수있다.(create가 들어올수있음)그래서 맨밑으로 이동한다.
     path:'/blogs/:id',
-    component: ShowPage
+    element: <ShowPage/>,
   },
   {
     path:'*',
-    component: NotFoundPage
+    element: <NotFoundPage/>,
   }
 ];
 export default routes;

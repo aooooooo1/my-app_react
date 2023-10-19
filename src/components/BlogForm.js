@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useHistory, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import propTypes from "prop-types";
 import {v4 as uuidv4} from 'uuid';
 import useToast from "../hooks/toast";
 const BlogForm = ({modify}) =>{
     //페이지 이동 함수 생성
-    const history = useHistory();
+    const navigate = useNavigate();
     //path의 'id'정보 가져오기
     const {id} = useParams(); 
     //서버로 내용들을 보넴.
@@ -73,7 +73,7 @@ const BlogForm = ({modify}) =>{
                     checkboxPublish: checkbox1,
                 }).then((res)=>{
                     console.log(res);
-                    history.push(`/blogs/${id}`);
+                    navigate(`/blogs/${id}`);
                 });
             } else{
                 //글작성 일경우
@@ -96,7 +96,7 @@ const BlogForm = ({modify}) =>{
     }     
     //뒤로 이동
     const backPage = ()=>{
-        history.goBack();
+        navigate.goBack();
     }
     // const backPage2 = ()=>{
     //     if(modify){
